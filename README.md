@@ -19,9 +19,22 @@ docker run --gpus all -it -d --name cortex -p 39281:39281 menloltd/cortex
 docker exec -it cortex cortex run llama3.2:3b-gguf-q4-km
 ```
 
-## Puesta en marcha del chatbot
+## Instalación de dependencias Python
 
-Para arrancar el chatbot simplemente debemos instalarlas dependencias del python y arrancar el script 'main.py'(En nuestro caso vamos a crear también un entorno virtual de Python con el objetivo de tener un único espacio con las dependencias de nuestro proyecto):
+Para arrancar el chatbot el primer paso obligatório es instalar las dependencias del python(En nuestro caso vamos a crear también un entorno virtual de Python con el objetivo de tener un único espacio con las dependencias de nuestro proyecto):
+
+```
+# Creación y activación del virtual env
+virtualenv env
+source env/bin/activate
+
+# Instalaciión de dependencias
+pip install -r requirements.txt
+```
+
+## Puesta en marcha del chatbot básico
+
+Para arrancar el chatbot simplemente arrancar el script 'main.py':
 
 ```
 # Creación y activación del virtual env
@@ -35,8 +48,27 @@ pip install -r requirements.txt
 python main.py
 ```
 
+## Puesta en marcha del chatbot con RAG
+
+Para arrancar el chatbot con el RAG(Retrieval-Augmented Generation) simplemente arrancar el script 'main_rag.py':
+
+```
+# Arranque del script
+python main_rag.py
+```
+
+## Probar el script para trastear con ChromaDB
+
+Para arrancar el script y trastear con ChromaDB(Base de datos orientada a vectores) ejecutamos el script 'testchromadb.py':
+
+```
+# Arranque del script
+python testchromadb.py
+```
+
 # Material complementario
 
+- Vídeo de Youtube ["Aprende a desarrollar chatbots con RAG(Retrieval-Augmented Generation) usando ChromaDB"](https://www.youtube.com/watch?v=Etx2WSKQUS0)
 - Vídeo de Youtube ["Aprende a desarrollar chatbots desde 0"](https://www.youtube.com/watch?v=Q_NLkUsJJ2c)
 - Artículo ["Cortex: Desplegando LLMs en local"](https://www.albertcoronado.com/2024/12/03/cortex-plataforma-de-ia-para-desplegar-llms-en-local) 
 

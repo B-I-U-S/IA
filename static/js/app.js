@@ -33,7 +33,7 @@ function processMessage(event) {
     if ( rdata.action == "init_system_response" ) {
         loadingbar.style.display = "block";
         lines.innerHTML += "<div class='line server'></div>";
-        linesData.push( { "role": "assistant", "content": txt } );
+        linesData.push( { "role": "assistant", "content": "" } );
     } else if ( rdata.action == "append_system_response" ) {
         slines = lines.querySelectorAll(".server");
         slines[ slines.length -1 ].innerHTML += rdata.content.replaceAll( "\n", "<br/>" );
