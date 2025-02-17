@@ -9,7 +9,8 @@ import uvicorn
 
 ENDPOINT = "http://127.0.0.1:39281/v1"
 #MODEL = "phi-3.5:3b-gguf-q4-km"
-MODEL = "llama3.2:3b-gguf-q4-km"
+#MODEL = "llama3.2:3b-gguf-q4-km"
+MODEL = "deepseek-r1-distill-qwen-14b:14b-gguf-q4-km"
 
 client = AsyncOpenAI(
     base_url=ENDPOINT,
@@ -66,6 +67,7 @@ async def plan_messages( messages, websocket ):
 
     r = response.choices[0].message.content
     print( r )
+    r = clean_sql( r )
 
     if not r.startswith("No"):
         await websocket.send_json( { "action": "append_system_response", "content": r } )
@@ -76,10 +78,14 @@ async def plan_messages( messages, websocket ):
     return await process_messages( messages, websocket )
 
 def execute__query( sql ):
-    sql = clean_sql( sql )
     return str( duckdb.sql( sql ).fetchall() )
 
 def clean_sql( sql ):
+    if sql.find("<|end_of_text|>") != -1: sql = sql[sql.find("<|end_of_text|>")+15:]
+    if sql.find("</think>") != -1: sql = sql[sql.find("</think>")+8:]
+
+    sql = sql.strip()
+
     if sql.startswith("```sql"): sql = sql[6:]
     if sql.startswith("```"): sql = sql[3:]
     if sql.endswith("```"): sql = sql[:len(sql)-3]

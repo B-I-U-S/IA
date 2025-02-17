@@ -10,6 +10,7 @@ import uvicorn
 
 ENDPOINT = "http://127.0.0.1:39281/v1"
 #MODEL = "phi-3.5:3b-gguf-q4-km"
+#MODEL = "deepseek-r1-distill-qwen-14b:14b-gguf-q4-km"
 MODEL = "llama3.2:3b-gguf-q4-km"
 
 client = chromadb.Client()
