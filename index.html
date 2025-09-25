@@ -1,3 +1,24 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML</title>
+    <!-- HTML -->
+    <!-- Custom Styles --><!--
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <p>Nothing to see here...</p>
+  <!-- Project --
+  <script src="main.js"></script>
+</body>
+</html>
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +29,7 @@
 				  /* ====== RESET Y BASE ====== */
   * { box-sizing: border-box; margin: 0; padding: 0; }
 	
-  html, body { height: 90vh; font-family: sans-serif; background: skyblue; }
+  html, body { height: 90vh; font-family: cursive; background: skyblue; }
 
   /* ====== LAYOUT DESKTOP ====== */
   .layout {
@@ -16,7 +37,7 @@
     display: grid;
     grid-template-columns: 25% 1fr 25%; 
   				margin-top: 9vh;
-    height: 90vh;
+    height: 80vh;
     border-radius: 2px;
   }
   aside, main {
@@ -24,8 +45,8 @@
     padding: 8px;
     border-radius: 3px;
   }
-  aside { background: linear-gradient(violet 0%, cyan 100%); border-radius: 2px 2px; }
-  main { background: linear-gradient(violet 0%, cyan 100%); border-radius: 5px 2px; }
+  aside { background: linear-gradient(120deg, #white 0%, cyan 100%); border-radius: 2px 2px; }
+  main { background: linear-gradient(120deg, #white 0%, cyan 100%); border-radius: 5px 2px; } 
 
   /* ====== NAVBAR SUPERIOR ====== */
   .navbar {
@@ -44,15 +65,16 @@
     border: solid black;
     box-shadow: 2px 5px ;
   }
-  .navbar h1 { font-size: 1.2rem; color: blue; }
+  .navbar h1 { font-size: 1.2rem; color: white; }
+  .navbar a { color: white; font-size: 1.5rem; font-family: Robot /*(Arial, Helvetica, sans-serif)*/ }
   .navbar button {
-    background: linear-gradient(skyblue 0%, pink 100%);
+    background: linear-gradient(skyblue 0%, white);
  /*   background: rgba(255,255,255,0.2);*/
     border: ;
     padding: 5px 10px;
-    color: white;
+    color: black;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 10px;
   				width: 10vh; height: 80%;
   }
 
@@ -97,9 +119,9 @@
     }/*/
     .chat-container {
       width: 100%;
-      max-width: 90%;
+      max-width: 100%;
       margin: 5px auto;
-      background: violet;
+      background: white;
       border-radius: 2px;
       box-shadow: 0 02 2px 10px rgba(0,0,0,0.1);
       overflow: hidden;
@@ -134,13 +156,14 @@
       padding: 10px;
       border: 1px solid black;
       border-radius: 4px;
+      max-width: 70%;
     }
     .input-area button {
       padding: 1px 2px;
       margin-left: 1px;
-      background: #007bff;
-      color: white;
-      border: none;
+      background: floralwhite;
+      color: black;
+      border: solid black;
       border-radius: 4px;
       cursor: pointer;
     }
@@ -161,6 +184,7 @@
   <aside class="left">
 	  
     <a href="index.html">pag principal</a>
+    <div>
 	<div style="width: 100%; height: 400px">
 	  <div class="chat-container">
     <div class="chat-box" id="chatBox"></div>
@@ -173,28 +197,40 @@
 	</div>	
     <p> atencion! los chats escritos no se guardarán, es mejor que los respaldes en algun ligar aparte mientras la beta aun siga. </p>	
 	<!--  <iframe src="blue-forest-8/ia/index.html">ia</iframe>-->
+  </div>
+  
   </aside>
   <main>
     
     <h2> B.I.U.S.  </h2>
     <h3> Bio. Intelligence. Un-. Soul</h3>
+        <div>
+    	<div style="width: 100%; height: 400px">
+    		<div class="chat-container">
+    			<div class="chat-box" id="chatBox"></div>
+    			<div class="input-area">
+    				<input type="text" id="userInput" placeholder="Escribe tu mensaje..." />
+    				
+    				<button onclick="sendMessage()">Enviar</button>
+    			</div>
+    		</div>
+    	</div>
+    	<p> atencion! los chats escritos no se guardarán, es mejor que los respaldes en algun ligar aparte mientras la beta aun siga. </p>
+    	<!--  <iframe src="blue-forest-8/ia/index.html">ia</iframe>-->
+    </div>
   				<!--MANUU CONTENIDO 
     <iframe src="archivos de texto y Solic.html" style="width:50vh;"></iframe>-->
     
     
-    <!-- IA CONTAINER --
-  					
-  		-->		
+    <!-- IA CONTAINER ---->		
   				
   				
   </main>
   <aside class="right">
-    
-    
-    <!--  <iframe src="" style="width:50vh;"></iframe>
+          <!--  <iframe src="" style="width:50vh;"></iframe>
     -->
   </aside>
-			
+	</div>		
 	
 	<script>
   // Lógica para mostrar/ocultar sidebars en móvil
@@ -212,8 +248,6 @@
   }
 
 
-
-//AI CHAT SCRIPTSS  ----------------------------------------------
 
 const API_KEY = "AIzaSyDSIy5m7mTXlMMR_OOdCu2Af_EwoCd124w"; // Replace with your Gemini API Key
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
@@ -294,14 +328,11 @@ function startVoice() {
     alert("Voice input error: " + event.error);
   };
 }
-		
+
 					
 				</script>   
 
 
-				</aside>
-				</div>
-	
+			
 </body>
 </html>
-
