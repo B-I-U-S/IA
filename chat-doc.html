@@ -1,0 +1,528 @@
+
+
+<!---
+💬 IA == B-I-U S ==
+Bio- Intelligence- Unstucked- Soul- IA
+hi
+Hi there! How can I help you today?
+me ayudas con un html porfavor plantilla de chat ia con subir documentos generales , y los lea plisss
+¡Claro! Crear una plantilla HTML completa para un chat de IA que procese documentos y responda preguntas es un proyecto extenso. Sin embargo, puedo proporcionarte un esqueleto sólido que puedes adaptar. Este esqueleto incluye la estructura HTML básica, áreas para el chat, un cargador de documentos, y algunos elementos de estilo. Luego, te guiaré sobre cómo podrías integrar la lógica de backend (probablemente con Python y alguna librería de procesamiento de lenguaje natural) para que todo funcione. **Estructura HTML (index.html):** --->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat IA con Subida de Documentos</title>
+    <link rel="stylesheet" href="style.css">
+				
+				<style>
+/*				*Estilos CSS (style.css):** */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden; /*  Important para que los bordes redondeados se apliquen correctamente */
+}
+
+header {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+main {
+    display: flex;
+    padding: 20px;
+}
+
+.chat-container {
+    flex: 2;
+    border-right: 1px solid #ccc;
+    padding-right: 20px;
+}
+
+#chat-log {
+    height: 300px;
+    overflow-y: scroll;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.message {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    clear: both; /* Evita que los elementos flotantes interfieran */
+}
+
+.user-message {
+    background-color: #DCF8C6;
+    float: right;
+}
+
+.bot-message {
+    background-color: #eee;
+    float: left;
+}
+
+
+.input-area {
+    display: flex;
+    margin-top: 10px;
+}
+
+#user-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#send-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.document-upload-container {
+    flex: 1;
+    padding-left: 20px;
+}
+
+#document-upload {
+    margin-bottom: 10px;
+}
+
+#file-name {
+    font-style: italic;
+    color: #777;
+}
+
+#process-button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#process-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+				</style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Chat IA - Procesador de Documentos</h1>
+        </header>
+
+        <main>
+            <div class="chat-container">
+                <div id="chat-log">
+                    <!-- Los mensajes del chat se agregarán aquí -->
+                    <div class="message bot-message">¡Hola! Sube un documento y empieza a preguntar.</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="Escribe tu pregunta...">
+                    <button id="send-button">Enviar</button>
+                </div>
+            </div>
+
+            <div class="document-upload-container">
+                <h2>Sube tus Documentos</h2>
+                <input type="file" id="document-upload" accept=".pdf,.txt,.docx,.doc">
+                <p id="file-name">Ningún archivo seleccionado</p>
+                <button id="process-button" disabled>Procesar Documento</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Chat IA. Todos los derechos reservados.</p>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+				<script>
+				///*JavaScript básico (script.js):**
+document.addEventListener('DOMContentLoaded', () => {
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const chatLog = document.getElementById('chat-log');
+    const documentUpload = document.getElementById('document-upload');
+    const fileNameDisplay = document.getElementById('file-name');
+    const processButton = document.getElementById('process-button');
+
+    let uploadedFile = null; // Variable para almacenar el archivo subido
+
+    // Evento para mostrar el nombre del archivo seleccionado
+    documentUpload.addEventListener('change', (event) => {
+        uploadedFile = event.target.files[0];
+        if (uploadedFile) {
+            fileNameDisplay.textContent = uploadedFile.name;
+            processButton.disabled = false; // Habilita el botón de procesamiento
+        } else {
+            fileNameDisplay.textContent = "Ningún archivo seleccionado";
+            processButton.disabled = true; // Deshabilita el botón si no hay archivo
+        }
+    });
+
+
+    // Evento para el botón "Procesar Documento"
+    processButton.addEventListener('click', () => {
+        if (uploadedFile) {
+            // Aquí va la lógica para enviar el archivo al backend
+            console.log("Procesando archivo:", uploadedFile.name);
+            //  Llamar a la función `uploadFileToBackend` (ver abajo)
+            uploadFileToBackend(uploadedFile);
+
+        }
+    });
+
+
+    sendButton.addEventListener('click', () => {
+        const message = userInput.value;
+        if (message.trim() !== '') {
+            addUserMessage(message);
+            userInput.value = '';
+
+            // Aquí es donde llamarías a tu backend de IA
+            // y luego agregarías la respuesta del bot.
+            // simularRespuestaDelBot(message);  // Reemplazar con llamada real al backend
+
+            sendUserMessage(message); // Enviar mensaje al backend
+        }
+    });
+
+    userInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendButton.click(); // Simula un clic en el botón "Enviar"
+        }
+    });
+
+
+
+    // Funciones auxiliares para agregar mensajes al chat
+    function addUserMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'user-message');
+        messageElement.textContent = message;
+        chatLog.appendChild(messageElement);
+        chatLog.scrollTop = chatLog.scrollHeight; // Auto-scroll
+    }
+
+    function addBotMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'bot-message');
+        messageElement.textContent = message;
+        chatLog.appendChild(messageElement);
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    // Función para simular la respuesta del bot (para pruebas)
+    function simularRespuestaDelBot(userMessage) {
+        // Simula un retraso para que parezca que el bot está "pensando"
+        setTimeout(() => {
+            const botResponse = `Respuesta de IA: Has dicho "${userMessage}". (Esto es una simulación)`;
+            addBotMessage(botResponse);
+        }, 1000); // 1 segundo de retraso
+    }
+
+
+    //  Funciones para comunicarse con el backend (AJAX)
+    function uploadFileToBackend(file) {
+        const formData = new FormData();
+        formData.append('document', file);
+
+        fetch('/upload', {  // Ajusta la URL a tu endpoint
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respuesta del backend (upload):', data);
+                //  Aquí puedes actualizar la interfaz de usuario con información
+                //  sobre el estado del procesamiento del documento.
+            })
+            .catch(error => {
+                console.error('Error al subir el archivo:', error);
+            });
+    }
+
+    function sendUserMessage(message) {
+        fetch('/chat', {  // Ajusta la URL a tu endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: message })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respuesta del backend (chat):', data);
+                addBotMessage(data.response); // Mostrar la respuesta del bot
+            })
+            .catch(error => {
+                console.error('Error al enviar el mensaje:', error);
+            });
+    }
+
+
+
+});
+
+				</script>
+</body>
+</html>
+<!----
+<style>
+				
+				</style>
+**Estilos CSS (style.css):**
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden; /*  Important para que los bordes redondeados se apliquen correctamente */
+}
+
+header {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+main {
+    display: flex;
+    padding: 20px;
+}
+
+.chat-container {
+    flex: 2;
+    border-right: 1px solid #ccc;
+    padding-right: 20px;
+}
+
+#chat-log {
+    height: 300px;
+    overflow-y: scroll;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.message {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    clear: both; /* Evita que los elementos flotantes interfieran */
+}
+
+.user-message {
+    background-color: #DCF8C6;
+    float: right;
+}
+
+.bot-message {
+    background-color: #eee;
+    float: left;
+}
+
+
+.input-area {
+    display: flex;
+    margin-top: 10px;
+}
+
+#user-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#send-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.document-upload-container {
+    flex: 1;
+    padding-left: 20px;
+}
+
+#document-upload {
+    margin-bottom: 10px;
+}
+
+#file-name {
+    font-style: italic;
+    color: #777;
+}
+
+#process-button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#process-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+
+
+<!---
+
+**Explicación del código:** * **HTML:** Define la estructura de la página, incluyendo el área del chat, el cargador de archivos, y los campos de entrada. Importante: el `accept=".pdf,.txt,.docx,.doc"` en el input file define que tipos de archivos se pueden subir. * **CSS:** Proporciona estilos básicos para que la página se vea presentable. He añadido comentarios sobre los estilos importantes, como el `overflow: hidden` para que los bordes redondeados del contenedor principal funcionen. * **JavaScript:** * Maneja la lógica del lado del cliente: * Captura los elementos del DOM. * Muestra el nombre del archivo subido. * Envía el archivo al backend cuando se hace clic en "Procesar Documento". * Envía mensajes al backend cuando el usuario escribe y presiona "Enviar". * Añade mensajes del usuario y del bot al registro del chat. * Incluye funciones `uploadFileToBackend` y `sendUserMessage` que hacen llamadas AJAX al backend (necesitarás un servidor backend configurado para manejar estas llamadas). * Incluye una función `simularRespuestaDelBot` para probar la interfaz de usuario sin un backend real. Debes reemplazar esta función con la lógica que se comunique con tu servidor. **Pasos siguientes: Backend (Python con Flask y Langchain - Ejemplo Simplificado)** Este es un ejemplo muy básico para ilustrar la idea. La implementación real puede ser mucho más compleja. 1. **Instala las bibliotecas necesarias:**
+pip install flask python-dotenv langchain unstructured
+    pip install pdfminer.six  # Necesario para PDFLoader
+    pip install docx  # Necesario para Docx2TXTLoader
+2. **Crea un archivo `app.py` (backend):**
+from flask import Flask, request, jsonify
+from flask_cors import CORS  # Importa CORS
+import os
+from dotenv import load_dotenv
+from langchain.document_loaders import PDFMinerLoader, Docx2TXTLoader, UnstructuredTXTLoader
+from langchain.indexes import VectorstoreIndexCreator
+from langchain.llms import OpenAI
+
+load_dotenv()  # Carga las variables de entorno del archivo .env
+
+app = Flask(__name__)
+CORS(app)  # Habilita CORS para todas las rutas
+
+# Asegúrate de tener tu clave de API de OpenAI configurada como variable de entorno
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
+UPLOAD_FOLDER = 'uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+index = None  # Variable global para almacenar el índice
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    global index  # Usa la variable global
+    if 'document' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    file = request.files['document']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    file.save(filename)
+
+    try:
+        # Cargar el documento usando el loader apropiado
+        if filename.endswith(".pdf"):
+            loader = PDFMinerLoader(filename)
+        elif filename.endswith(".docx") or filename.endswith(".doc"):
+            loader = Docx2TXTLoader(filename)
+        elif filename.endswith(".txt"):
+            loader = UnstructuredTXTLoader(filename)
+        else:
+            return jsonify({'error': 'Unsupported file type'}), 400
+
+        data = loader.load()
+
+        # Crear el índice vectorial (usando OpenAI embeddings por defecto)
+        index = VectorstoreIndexCreator().from_loaders([loader])  # Usa 'loader' en lugar de 'data'
+
+        return jsonify({'message': 'File uploaded and processed successfully'}), 200
+
+    except Exception as e:
+        print(e) # Imprime el error en la consola del servidor para debugging
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    global index
+    data = request.get_json()
+    message = data.get('message')
+
+    if not message:
+        return jsonify({'error': 'No message provided'}), 400
+
+    if index is None:
+        return jsonify({'response': 'Por favor, sube y procesa un documento primero.'}), 200
+
+    try:
+        # Usar el índice para responder a la pregunta
+        response = index.query(message, llm=OpenAI())  # Especifica el LLM aquí también
+
+        return jsonify({'response': str(response)}), 200
+
+    except Exception as e:
+        print(e) # Imprime el error en la consola del servidor para debugging
+        return jsonify({'error': str(e)}), 500
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+3. **Crea un archivo `.env`:**
+OPENAI_API_KEY=tu_clave_api_de_openai
+Reemplaza `tu_clave_api_de_openai` con tu clave API real. **¡No subas este archivo a GitHub!** **Explicación del Backend:** * **Flask:** Un framework web ligero para Python. * **CORS:** Esencial para permitir que tu frontend (que se sirve desde un puerto diferente) haga solicitudes a tu backend. * **`python-dotenv`:** Para cargar tu clave de API de OpenAI de forma segura desde un archivo `.env`. * **`langchain`:** Una biblioteca poderosa para trabajar con LLMs. Aquí, la usamos para: * Cargar el documento usando `PDFMinerLoader`, `Docx2TXTLoader` o `UnstructuredTXTLoader` (según el tipo de archivo). Necesitarás instalar las dependencias correspondientes. * Crear un índice vectorial del documento (esto permite búsquedas semánticas eficientes). * Consultar el índice con la pregunta del usuario. * **`UPLOAD_FOLDER`:** Define la carpeta donde se guardarán los archivos subidos. **Cómo ejecutar el código:** 1. **Guarda los archivos HTML, CSS y JavaScript en la misma carpeta.** 2. **Guarda el archivo `app.py` y el archivo `.env` en una carpeta separada (la carpeta del backend).** 3. **Abre dos terminales.** 4. **En la primera terminal, navega a la carpeta del backend y ejecuta `python app.py`.** 5. **En la segunda terminal, abre el archivo `index.html` en tu navegador.** **Puntos importantes y mejoras:** * **Manejo de errores:** El código de ejemplo tiene un manejo de errores básico, pero debes mejorarlo para proporcionar mensajes de error más informativos al usuario. * **Seguridad:** * Nunca expongas tu clave de API de OpenAI directamente en el código del lado del cliente. Siempre mantenla en el backend. * Valida y sanitiza la entrada del usuario para evitar ataques de inyección. * Considera implementar autenticación y autorización si necesitas restringir el acceso a tu aplicación. * **IU/UX:** Mejora la interfaz de usuario con: * Indicadores de carga mientras se procesa el documento o se espera la respuesta del bot. * Un diseño más atractivo. * Soporte para múltiples documentos. * Historial del chat persistente. * **Rendimiento:** La creación del índice vectorial puede ser lenta para documentos grandes. Considera usar una base de datos vectorial (como ChromaDB o Pinecone) para un rendimiento mejorado. También puedes explorar técnicas de chunking para dividir documentos grandes en partes más pequeñas. * **Modelo de lenguaje:** `OpenAI()` usa el modelo `text-davinci-003` por defecto, que está obsoleto. Considera usar un modelo más reciente como `gpt-3.5-turbo` o `gpt-4`. Si lo haces, necesitarás usar `ChatOpenAI` en lugar de `OpenAI` y formatear tus prompts como una lista de mensajes. * **Prompt Engineering:** La calidad de las respuestas del bot depende en gran medida del prompt que se le proporcione. Experimenta con diferentes prompts para obtener mejores resultados. * **Costo:** Usar la API de OpenAI tiene un costo. Ten en cuenta el uso que le das a tu aplicación para evitar sorpresas en tu factura. Este es un punto de partida sólido. ¡Espero que te sea útil! Recuerda que construir una aplicación de chat de IA completa es un proceso iterativo que requiere experimentación y refinamiento continuos.
+Ask anything
+➤
+🎙️
+----->
